@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <main>
       <SectionOne
-        URI={process.env.GRAPHQL_URI || "http://localhost:3000/api/graphql"}
+        URI={process.env.GRAPHQL_URI || "https://toptech-assesment.vercel.app/"}
       />
     </main>
   );

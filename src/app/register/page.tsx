@@ -6,7 +6,7 @@ type Props = {};
 
 function RegisterPage({}: Props) {
   const gqlClient = new ApolloClient({
-    uri: process.env.GRAPHQL_URI || "http://localhost:3000/api/graphql",
+    uri: process.env.GRAPHQL_URI || "https://toptech-assesment.vercel.app/",
     cache: new InMemoryCache(),
   });
 
