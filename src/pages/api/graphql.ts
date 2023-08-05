@@ -58,24 +58,51 @@ type User {
 }
 type Query {
   users: [User],
-  oneuser: User
+  oneuser(username: String): User
 }
+input DataInput {
+    username: String!
+    linkedin: String!
+    phone: String!
+    email: String!
+    company: String!
+}
+
+type Status{
+  message: String!
+}
+
+type Mutation {
+  insertUser(data: DataInput!): Status
+}
+
 `
 
 const resolvers = {
   Query: {
     users: async () => {
       const { db } = await connectToDatabase();
-      const targetUsers = await db.collection('users').find({}).toArray();
-      console.log(targetUsers);
-      return targetUsers;
+      const allUsers = await db.collection('users').find({}).toArray();
+      return allUsers;
     },
-    oneuser: async () => {
+    oneuser: async (parent: any, args: any) => {
       const { db } = await connectToDatabase();
-      const targetUser = await db.collection('users').findOne({ username: "AwaisYusaf" });
-      return targetUser;
+      const targetUser = await db.collection('users').findOne({ username: args.username });
+      return targetUser ? targetUser : users[0];
     }
   },
+  Mutation: {
+    insertUser: async (_: any, { data }: { data: any }) => {
+      const { db } = await connectToDatabase();
+      try {
+        await db.collection('users').insertOne(data);
+        return { message: "success" }
+      }
+      catch (e) {
+        return { message: "failed" }
+      }
+    },
+  }
 
 }
 const cors = Cors();

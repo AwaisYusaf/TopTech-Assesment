@@ -12,7 +12,6 @@ function SectionOne({ URI }: Props) {
     uri: URI,
     cache: new InMemoryCache(),
   });
-  console.log(URI);
 
   return (
     <div>

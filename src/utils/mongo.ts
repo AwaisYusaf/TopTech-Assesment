@@ -1,6 +1,6 @@
 import { MongoClient, ServerApiVersion } from 'mongodb';
 
-const MONGODB_URI = 'mongodb+srv://awais_8:CebL5EGoHtlJQH6Y@cluster0.7ithz.mongodb.net/?retryWrites=true&w=majority';
+const MONGODB_URI = process.env.MONGODB_URI || "";
 const MONGODB_DB = 'TopTech';
 
 let cachedClient: any = null;
