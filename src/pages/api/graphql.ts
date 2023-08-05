@@ -10,34 +10,6 @@ const users = [
     linkedin: "https://www.linkedin.com/AwaisYusaf",
     company: "TopTech",
   },
-  {
-    username: "AamirYusaf",
-    email: "aamir@gmail.com",
-    phone: "0302-5396548",
-    linkedin: "https://www.linkedin.com/AwaisYusaf",
-    company: "DevSinc",
-  },
-  {
-    username: "ZeeshanAhmad",
-    email: "zeesham@gmail.com",
-    phone: "0303-5396548",
-    linkedin: "https://www.linkedin.com/AwaisYusaf",
-    company: "Spotify",
-  },
-  {
-    username: "HammadAmjad",
-    email: "hammad@gmail.com",
-    phone: "0310-5356548",
-    linkedin: "https://www.linkedin.com/AwaisYusaf",
-    company: "Microsoft",
-  },
-  {
-    username: "Naeem",
-    email: "Naeem@gmail.com",
-    phone: "0316-5396548",
-    linkedin: "https://www.linkedin.com/AwaisYusaf",
-    company: "TeraData",
-  },
 ];
 
 export const config = {
@@ -71,11 +43,9 @@ input DataInput {
 type Status{
   message: String!
 }
-
 type Mutation {
   insertUser(data: DataInput!): Status
 }
-
 `
 
 const resolvers = {
