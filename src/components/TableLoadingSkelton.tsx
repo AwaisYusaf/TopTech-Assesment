@@ -35,19 +35,12 @@ function TableLoadingSkelton({}: Props) {
                     type="text"
                     id="simple-search"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 "
-                    placeholder="Search by"
+                    placeholder="Search"
                   />
                 </div>
-                <select
-                  id="filterDropdownButton"
-                  className="w-full md:w-auto flex items-center justify-center py-2 pl-3 pr-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 "
-                >
-                  <option value="option-username">Username</option>
-                  <option value="option-email">Email</option>
-                  <option value="option-linkedin">LinkedIn</option>
-                  <option value="option-phone">Phone</option>
-                  <option value="option-company">Company</option>
-                </select>
+                <button className="bg-blue-400 text-sm font-semibold rounded-md ring-2 ring-blue-600 ring-offset-2 px-6 py-2 text-white">
+                  Search
+                </button>
               </form>
             </div>
             <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
@@ -145,14 +138,17 @@ function TableLoadingSkelton({}: Props) {
                 </tr>
               </thead>
               <tbody>
-                <TableRowLoadingSkelton delay={1} />
-                <TableRowLoadingSkelton delay={2} />
-                <TableRowLoadingSkelton delay={3} />
-                <TableRowLoadingSkelton delay={4} />
-                <TableRowLoadingSkelton delay={5} />
-                <TableRowLoadingSkelton delay={6} />
-                <TableRowLoadingSkelton delay={7} />
-                <TableRowLoadingSkelton delay={8} />
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <h1 className="pt-10 text-gray-500 text-2xl animate-pulse">
+                      Loading...
+                    </h1>
+                  </td>
+                  <td></td>
+                  <td></td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -161,10 +157,13 @@ function TableLoadingSkelton({}: Props) {
             aria-label="Table navigation"
           >
             <span className="text-sm font-normal text-gray-500 ">
-              Showing
-              <span className="font-semibold text-gray-900 ">1-10</span>
-              of
-              <span className="font-semibold text-gray-900 ">1000</span>
+              Loading
+              <span className="font-semibold text-gray-900 "> </span>
+              Results
+              <span className="font-semibold text-gray-900 ">
+                {" "}
+                -- Please wait
+              </span>
             </span>
             <ul className="inline-flex items-stretch -space-x-px">
               <li>
@@ -181,9 +180,9 @@ function TableLoadingSkelton({}: Props) {
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      fill-rule="evenodd"
+                      fillRule="evenodd"
                       d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                      clip-rule="evenodd"
+                      clipRule="evenodd"
                     />
                   </svg>
                 </a>
@@ -244,9 +243,9 @@ function TableLoadingSkelton({}: Props) {
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      fill-rule="evenodd"
+                      fillRule="evenodd"
                       d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                      clip-rule="evenodd"
+                      clipRule="evenodd"
                     />
                   </svg>
                 </button>

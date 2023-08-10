@@ -29,7 +29,7 @@ type User {
 }
 
 type Query {
-  users(limit:Int!,offset:Int!): [User],
+  users(limit:Int!,offset:Int!,query:String): [User],
   user(username: String): User,
 }
 
@@ -52,9 +52,17 @@ type Mutation {
 
 const resolvers = {
   Query: {
-    users: async (parent: any, { limit, offset }: any) => {
+    users: async (parent: any, { limit, offset, query }: any) => {
       const { db } = await connectToDatabase();
       const allUsers = await db.collection('users').find({}).toArray();
+      if (query) {
+        const searchResults = allUsers.filter((user: any) => user.username.toLowerCase().includes(query.toLowerCase()));
+        if (searchResults.length > 10) {
+          return searchResults.slice(offset, offset + limit);
+        }
+        return searchResults;
+      }
+
       return allUsers.slice(offset, offset + limit);
     },
 

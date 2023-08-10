@@ -8,6 +8,7 @@ type Props = {
   data: User[];
   setPage: any;
   page: number;
+  querySearch: any;
 };
 
 const Sort = {
@@ -22,10 +23,9 @@ const Sort = {
   DescendingByPhone: "DescendingByPhone",
 };
 
-export default function UserTable({ data, setPage, page }: Props) {
+export default function UserTable({ data, setPage, page, querySearch }: Props) {
   const [updatedData, setUpdatedData] = useState<User[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchBy, setSearchBy] = useState("option-username");
   const [sorted, setSorted] = useState(Sort.default);
 
   //States for handling dropdowns
@@ -34,92 +34,94 @@ export default function UserTable({ data, setPage, page }: Props) {
 
   useEffect(() => {
     //Filter by SearchBox Query.
-    if (searchQuery.length > 0) {
-      let filtered: User[] = [];
-      if (searchBy === "option-username") {
-        filtered = data.filter((user) =>
-          user.username.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-      } else if (searchBy === "option-phone") {
-        filtered = data.filter((user) => user.phone.includes(searchQuery));
-      } else if (searchBy === "option-company") {
-        filtered = data.filter((user) =>
-          user.company.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-      } else if (searchBy === "option-email") {
-        filtered = data.filter((user) =>
-          user.email.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-      } else if (searchBy === "option-linkedin") {
-        filtered = data.filter((user) =>
-          user.linkedin.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-      }
-      setUpdatedData(filtered);
-      return;
-    }
+    // if (searchQuery.length > 0) {
+    //   let filtered: User[] = [];
+    //   if (searchBy === "option-username") {
+    //     filtered = data.filter((user) =>
+    //       user.username.toLowerCase().includes(searchQuery.toLowerCase())
+    //     );
+    //   } else if (searchBy === "option-phone") {
+    //     filtered = data.filter((user) => user.phone.includes(searchQuery));
+    //   } else if (searchBy === "option-company") {
+    //     filtered = data.filter((user) =>
+    //       user.company.toLowerCase().includes(searchQuery.toLowerCase())
+    //     );
+    //   } else if (searchBy === "option-email") {
+    //     filtered = data.filter((user) =>
+    //       user.email.toLowerCase().includes(searchQuery.toLowerCase())
+    //     );
+    //   } else if (searchBy === "option-linkedin") {
+    //     filtered = data.filter((user) =>
+    //       user.linkedin.toLowerCase().includes(searchQuery.toLowerCase())
+    //     );
+    //   }
+    //   setUpdatedData(filtered);
+    //   return;
+    // }
 
     //Filter by sort order
 
+    let sortedData = [...data];
     if (sorted === Sort.default) {
       setUpdatedData([]);
     } else if (sorted === Sort.AscendingByUsername) {
-      data.sort((a, b) => {
+      sortedData.sort((a, b) => {
         if (a.username.toLowerCase() > b.username.toLowerCase()) {
           return 1;
         }
         return -1;
       });
     } else if (sorted === Sort.DescendingByUsername) {
-      data.sort((a, b) => {
+      sortedData.sort((a, b) => {
         if (a.username.toLowerCase() > b.username.toLowerCase()) {
           return -1;
         }
         return 1;
       });
     } else if (sorted === Sort.AscendingByEmail) {
-      data.sort((a, b) => {
+      sortedData.sort((a, b) => {
         if (a.email > b.email) {
           return 1;
         }
         return -1;
       });
     } else if (sorted === Sort.DescendingByEmail) {
-      data.sort((a, b) => {
+      sortedData.sort((a, b) => {
         if (a.email > b.email) {
           return -1;
         }
         return 1;
       });
     } else if (sorted === Sort.AscendingByPhone) {
-      data.sort((a, b) => {
+      sortedData.sort((a, b) => {
         if (a.phone > b.phone) {
           return 1;
         }
         return -1;
       });
     } else if (sorted === Sort.DescendingByPhone) {
-      data.sort((a, b) => {
+      sortedData.sort((a, b) => {
         if (a.phone > b.phone) {
           return -1;
         }
         return 1;
       });
     } else if (sorted === Sort.AscendingByCompany) {
-      data.sort((a, b) => {
+      sortedData.sort((a, b) => {
         if (a.company > b.company) {
           return 1;
         }
         return -1;
       });
     } else if (sorted === Sort.DescendingByCompany) {
-      data.sort((a, b) => {
+      sortedData.sort((a, b) => {
         if (a.company > b.company) {
           return -1;
         }
         return 1;
       });
     }
+    setUpdatedData(sortedData);
     setRendered(!rendered);
   }, [searchQuery, sorted]);
 
@@ -132,7 +134,7 @@ export default function UserTable({ data, setPage, page }: Props) {
         <div className="bg-white relative min-h-screen flex flex-col shadow-md sm:rounded-lg overflow-hidden">
           <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
             <div className="w-full md:w-1/2">
-              <form className="flex items-center space-x-3">
+              <div className="flex items-center space-x-3">
                 <label htmlFor="simple-search" className="sr-only">
                   Search
                 </label>
@@ -156,23 +158,18 @@ export default function UserTable({ data, setPage, page }: Props) {
                     type="text"
                     id="simple-search"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 "
-                    placeholder="Search by"
+                    placeholder="Search"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
                 </div>
-                <select
-                  id="filterDropdownButton"
-                  onChange={(e) => setSearchBy(e.target.value)}
-                  className="w-full md:w-auto flex items-center justify-center py-2 pl-3 pr-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 "
+                <button
+                  onClick={() => querySearch(searchQuery)}
+                  className="bg-blue-400 text-sm font-semibold rounded-md ring-2 ring-blue-600 ring-offset-2 px-6 py-2 text-white"
                 >
-                  <option value="option-username">Username</option>
-                  <option value="option-email">Email</option>
-                  <option value="option-linkedin">LinkedIn</option>
-                  <option value="option-phone">Phone</option>
-                  <option value="option-company">Company</option>
-                </select>
-              </form>
+                  Search
+                </button>
+              </div>
             </div>
             <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
               <Link
@@ -295,16 +292,16 @@ export default function UserTable({ data, setPage, page }: Props) {
                   </th>
                 </tr>
               </thead>
+
               <tbody>
-                {searchQuery.length > 0 &&
+                {updatedData.length > 0 &&
                   updatedData.map((user: User, index: number) => {
                     return <UserTableRow key={index} data={user} />;
                   })}
               </tbody>
 
               <tbody>
-                {data.length > 0 &&
-                  searchQuery.length == 0 &&
+                {updatedData.length == 0 &&
                   data.map((user: User, index: number) => {
                     return <UserTableRow key={index} data={user} />;
                   })}
@@ -317,14 +314,18 @@ export default function UserTable({ data, setPage, page }: Props) {
           >
             <span className="text-sm font-normal text-gray-500 ">
               Showing
-              <span className="font-semibold text-gray-900 ">1-10</span>
-              of
-              <span className="font-semibold text-gray-900 ">1000</span>
+              <span className="font-semibold text-gray-900 ">
+                {" "}
+                {page * 10 + 1}-{data.length + page * 10}{" "}
+              </span>
             </span>
             <ul className="inline-flex items-stretch -space-x-px">
               <li>
                 <button
-                  onClick={() => setPage(page - 1)}
+                  onClick={() => {
+                    setPage(page - 1);
+                    setUpdatedData([]);
+                  }}
                   disabled={page == 0}
                   className="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700  "
                 >
@@ -382,7 +383,11 @@ export default function UserTable({ data, setPage, page }: Props) {
 
               <li>
                 <button
-                  onClick={() => setPage(page + 1)}
+                  onClick={() => {
+                    setPage(page + 1);
+                    setUpdatedData([]);
+                  }}
+                  disabled={data.length < 10}
                   className="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700  "
                 >
                   <span className="sr-only">Next</span>
