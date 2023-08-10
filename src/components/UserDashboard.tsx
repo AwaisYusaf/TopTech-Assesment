@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { useQuery, gql } from "@apollo/client";
 import UserTable from "./UserTable";
+import TableLoadingSkelton from "./TableLoadingSkelton";
 
 type Props = {};
 
 const GET_USERS = gql`
-  query Query {
-    users {
+  query Query($limit: Int!, $offset: Int!) {
+    users(limit: $limit, offset: $offset) {
       username
       email
       linkedin
@@ -16,8 +17,17 @@ const GET_USERS = gql`
   }
 `;
 
+const RESULT_SIZE = 10;
+
 export default function UserDashboard({}: Props) {
-  const { data, loading } = useQuery(GET_USERS);
+  const [currentPage, setPage] = useState(0);
+  const { data, loading } = useQuery(GET_USERS, {
+    variables: {
+      limit: RESULT_SIZE,
+      offset: RESULT_SIZE * currentPage,
+    },
+  });
+
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col justify-center">
@@ -92,5 +102,6 @@ export default function UserDashboard({}: Props) {
       </div>
     );
   }
-  return <UserTable usersData={data.users} />;
+
+  return <UserTable data={data.users} page={currentPage} setPage={setPage} />;
 }

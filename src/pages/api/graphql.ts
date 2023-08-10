@@ -18,7 +18,6 @@ export const config = {
   }
 }
 
-
 const typeDefs = gql`
 type User {
   _id:String
@@ -28,10 +27,12 @@ type User {
   linkedin:String
   company:String
 }
+
 type Query {
-  users: [User],
-  oneuser(username: String): User
+  users(limit:Int!,offset:Int!): [User],
+  user(username: String): User,
 }
+
 input DataInput {
     username: String!
     linkedin: String!
@@ -43,6 +44,7 @@ input DataInput {
 type Status{
   message: String!
 }
+
 type Mutation {
   insertUser(data: DataInput!): Status
 }
@@ -50,12 +52,13 @@ type Mutation {
 
 const resolvers = {
   Query: {
-    users: async () => {
+    users: async (parent: any, { limit, offset }: any) => {
       const { db } = await connectToDatabase();
       const allUsers = await db.collection('users').find({}).toArray();
-      return allUsers;
+      return allUsers.slice(offset, offset + limit);
     },
-    oneuser: async (parent: any, args: any) => {
+
+    user: async (parent: any, args: any) => {
       const { db } = await connectToDatabase();
       const targetUser = await db.collection('users').findOne({ username: args.username });
       return targetUser ? targetUser : users[0];
@@ -87,7 +90,7 @@ const server = new ApolloServer({
 const startServer = server.start();
 
 export default cors(async (req, res) => {
-  if (req.method == "OPTIONS") {
+  if (req.method === "OPTIONS") {
     res.end();
     return false;
   }

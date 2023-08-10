@@ -1,133 +1,12 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import UserTableRow from "./UserTableRow";
+import React from "react";
 import Link from "next/link";
-import type { User } from "@/app/page";
+import TableRowLoadingSkelton from "./TableRowLoadingSkelton";
 
-type Props = {
-  data: User[];
-  setPage: any;
-  page: number;
-};
+type Props = {};
 
-const Sort = {
-  default: "",
-  AscendingByUsername: "AscendingByUsername",
-  DescendingByUsername: "DescendingByUsername",
-  AscendingByEmail: "AscendingByEmail",
-  DescendingByEmail: "DescendingByEmail",
-  AscendingByCompany: "AscendingByCompany",
-  DescendingByCompany: "DescendingByCompany",
-  AscendingByPhone: "AscendingByPhone",
-  DescendingByPhone: "DescendingByPhone",
-};
-
-export default function UserTable({ data, setPage, page }: Props) {
-  const [updatedData, setUpdatedData] = useState<User[]>([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchBy, setSearchBy] = useState("option-username");
-  const [sorted, setSorted] = useState(Sort.default);
-
-  //States for handling dropdowns
-  const [showSortByDropDown, setShowSortByDropDown] = useState(false);
-  const [rendered, setRendered] = useState(false);
-
-  useEffect(() => {
-    //Filter by SearchBox Query.
-    if (searchQuery.length > 0) {
-      let filtered: User[] = [];
-      if (searchBy === "option-username") {
-        filtered = data.filter((user) =>
-          user.username.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-      } else if (searchBy === "option-phone") {
-        filtered = data.filter((user) => user.phone.includes(searchQuery));
-      } else if (searchBy === "option-company") {
-        filtered = data.filter((user) =>
-          user.company.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-      } else if (searchBy === "option-email") {
-        filtered = data.filter((user) =>
-          user.email.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-      } else if (searchBy === "option-linkedin") {
-        filtered = data.filter((user) =>
-          user.linkedin.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-      }
-      setUpdatedData(filtered);
-      return;
-    }
-
-    //Filter by sort order
-
-    if (sorted === Sort.default) {
-      setUpdatedData([]);
-    } else if (sorted === Sort.AscendingByUsername) {
-      data.sort((a, b) => {
-        if (a.username.toLowerCase() > b.username.toLowerCase()) {
-          return 1;
-        }
-        return -1;
-      });
-    } else if (sorted === Sort.DescendingByUsername) {
-      data.sort((a, b) => {
-        if (a.username.toLowerCase() > b.username.toLowerCase()) {
-          return -1;
-        }
-        return 1;
-      });
-    } else if (sorted === Sort.AscendingByEmail) {
-      data.sort((a, b) => {
-        if (a.email > b.email) {
-          return 1;
-        }
-        return -1;
-      });
-    } else if (sorted === Sort.DescendingByEmail) {
-      data.sort((a, b) => {
-        if (a.email > b.email) {
-          return -1;
-        }
-        return 1;
-      });
-    } else if (sorted === Sort.AscendingByPhone) {
-      data.sort((a, b) => {
-        if (a.phone > b.phone) {
-          return 1;
-        }
-        return -1;
-      });
-    } else if (sorted === Sort.DescendingByPhone) {
-      data.sort((a, b) => {
-        if (a.phone > b.phone) {
-          return -1;
-        }
-        return 1;
-      });
-    } else if (sorted === Sort.AscendingByCompany) {
-      data.sort((a, b) => {
-        if (a.company > b.company) {
-          return 1;
-        }
-        return -1;
-      });
-    } else if (sorted === Sort.DescendingByCompany) {
-      data.sort((a, b) => {
-        if (a.company > b.company) {
-          return -1;
-        }
-        return 1;
-      });
-    }
-    setRendered(!rendered);
-  }, [searchQuery, sorted]);
-
+function TableLoadingSkelton({}: Props) {
   return (
-    <section
-      className="bg-gray-50 py-8"
-      onClick={() => (showSortByDropDown ? setShowSortByDropDown(false) : {})}
-    >
+    <section className="bg-gray-50 py-8">
       <div className="mx-auto px-4 lg:px-12 ">
         <div className="bg-white relative min-h-screen flex flex-col shadow-md sm:rounded-lg overflow-hidden">
           <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
@@ -157,13 +36,10 @@ export default function UserTable({ data, setPage, page }: Props) {
                     id="simple-search"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 "
                     placeholder="Search by"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
                   />
                 </div>
                 <select
                   id="filterDropdownButton"
-                  onChange={(e) => setSearchBy(e.target.value)}
                   className="w-full md:w-auto flex items-center justify-center py-2 pl-3 pr-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 "
                 >
                   <option value="option-username">Username</option>
@@ -199,7 +75,6 @@ export default function UserTable({ data, setPage, page }: Props) {
                 <button
                   className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 "
                   type="button"
-                  onClick={() => setShowSortByDropDown(!showSortByDropDown)}
                 >
                   <svg
                     className="-ml-1 mr-1.5 w-5 h-5"
@@ -218,56 +93,30 @@ export default function UserTable({ data, setPage, page }: Props) {
                 </button>
                 <div
                   id="sortby-dropdown"
-                  className={`absolute ${
-                    showSortByDropDown ? "" : "hidden"
-                  } top-14 right-4 z-10 w-48 bg-white rounded divide-y divide-gray-100 shadow`}
+                  className={`hidden top-14 right-4 z-10 w-48 bg-white rounded divide-y divide-gray-100 shadow`}
                 >
-                  <button
-                    onClick={() => setSorted(Sort.AscendingByUsername)}
-                    className=" my-1 block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 w-full text-start"
-                  >
+                  <button className=" my-1 block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 w-full text-start">
                     Username ascending
                   </button>
-                  <button
-                    onClick={() => setSorted(Sort.DescendingByUsername)}
-                    className=" my-1 block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 w-full text-start"
-                  >
+                  <button className=" my-1 block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 w-full text-start">
                     Username descending
                   </button>
-                  <button
-                    onClick={() => setSorted(Sort.AscendingByEmail)}
-                    className=" my-1 block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 w-full text-start"
-                  >
+                  <button className=" my-1 block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 w-full text-start">
                     Email ascending
                   </button>
-                  <button
-                    onClick={() => setSorted(Sort.DescendingByEmail)}
-                    className=" my-1 block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 w-full text-start"
-                  >
+                  <button className=" my-1 block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 w-full text-start">
                     Email descending
                   </button>
-                  <button
-                    onClick={() => setSorted(Sort.AscendingByPhone)}
-                    className=" my-1 block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 w-full text-start"
-                  >
+                  <button className=" my-1 block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 w-full text-start">
                     Phone ascending
                   </button>
-                  <button
-                    onClick={() => setSorted(Sort.DescendingByPhone)}
-                    className=" my-1 block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 w-full text-start"
-                  >
+                  <button className=" my-1 block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 w-full text-start">
                     Phone descending
                   </button>
-                  <button
-                    onClick={() => setSorted(Sort.AscendingByCompany)}
-                    className=" my-1 block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 w-full text-start"
-                  >
+                  <button className=" my-1 block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 w-full text-start">
                     Company ascending
                   </button>
-                  <button
-                    onClick={() => setSorted(Sort.DescendingByCompany)}
-                    className=" my-1 block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 w-full text-start"
-                  >
+                  <button className=" my-1 block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 w-full text-start">
                     Company descending
                   </button>
                 </div>
@@ -296,18 +145,14 @@ export default function UserTable({ data, setPage, page }: Props) {
                 </tr>
               </thead>
               <tbody>
-                {searchQuery.length > 0 &&
-                  updatedData.map((user: User, index: number) => {
-                    return <UserTableRow key={index} data={user} />;
-                  })}
-              </tbody>
-
-              <tbody>
-                {data.length > 0 &&
-                  searchQuery.length == 0 &&
-                  data.map((user: User, index: number) => {
-                    return <UserTableRow key={index} data={user} />;
-                  })}
+                <TableRowLoadingSkelton delay={1} />
+                <TableRowLoadingSkelton delay={2} />
+                <TableRowLoadingSkelton delay={3} />
+                <TableRowLoadingSkelton delay={4} />
+                <TableRowLoadingSkelton delay={5} />
+                <TableRowLoadingSkelton delay={6} />
+                <TableRowLoadingSkelton delay={7} />
+                <TableRowLoadingSkelton delay={8} />
               </tbody>
             </table>
           </div>
@@ -323,9 +168,8 @@ export default function UserTable({ data, setPage, page }: Props) {
             </span>
             <ul className="inline-flex items-stretch -space-x-px">
               <li>
-                <button
-                  onClick={() => setPage(page - 1)}
-                  disabled={page == 0}
+                <a
+                  href="#"
                   className="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700  "
                 >
                   <span className="sr-only">Previous</span>
@@ -337,25 +181,32 @@ export default function UserTable({ data, setPage, page }: Props) {
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      fillRule="evenodd"
+                      fill-rule="evenodd"
                       d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                      clipRule="evenodd"
+                      clip-rule="evenodd"
                     />
                   </svg>
-                </button>
+                </a>
               </li>
               <li>
-                <a className="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700  ">
+                <a
+                  href="#"
+                  className="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700  "
+                >
                   1
                 </a>
               </li>
               <li>
-                <a className="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700  ">
+                <a
+                  href="#"
+                  className="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700  "
+                >
                   2
                 </a>
               </li>
               <li>
                 <a
+                  href="#"
                   aria-current="page"
                   className="flex items-center justify-center text-sm z-10 py-2 px-3 leading-tight text-primary-600 bg-primary-50 border border-primary-300 hover:bg-primary-100 hover:text-primary-700 "
                 >
@@ -364,6 +215,7 @@ export default function UserTable({ data, setPage, page }: Props) {
               </li>
               <li>
                 <a
+                  href="#"
                   aria-current="page"
                   className="flex items-center justify-center text-sm z-10 py-2 px-3 leading-tight text-primary-600 bg-primary-50 border border-primary-300 hover:bg-primary-100 hover:text-primary-700 "
                 >
@@ -372,19 +224,17 @@ export default function UserTable({ data, setPage, page }: Props) {
               </li>
 
               <li>
-                <button
+                <a
+                  href="#"
                   aria-current="page"
                   className="flex items-center justify-center text-sm z-10 py-2 px-3 leading-tight text-primary-600 bg-primary-50 border border-primary-300 hover:bg-primary-100 hover:text-primary-700 "
                 >
                   5
-                </button>
+                </a>
               </li>
 
               <li>
-                <button
-                  onClick={() => setPage(page + 1)}
-                  className="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700  "
-                >
+                <button className="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700  ">
                   <span className="sr-only">Next</span>
                   <svg
                     className="w-5 h-5"
@@ -394,9 +244,9 @@ export default function UserTable({ data, setPage, page }: Props) {
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      fillRule="evenodd"
+                      fill-rule="evenodd"
                       d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                      clipRule="evenodd"
+                      clip-rule="evenodd"
                     />
                   </svg>
                 </button>
@@ -408,3 +258,5 @@ export default function UserTable({ data, setPage, page }: Props) {
     </section>
   );
 }
+
+export default TableLoadingSkelton;

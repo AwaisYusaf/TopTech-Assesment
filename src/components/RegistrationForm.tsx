@@ -104,7 +104,7 @@ export default function RegistrationForm({}: Props) {
               </label>
               <div className="mt-2">
                 <input
-                  {...register("username")}
+                  {...register("username", { required: true })}
                   type="text"
                   className="block w-full px-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
@@ -120,7 +120,7 @@ export default function RegistrationForm({}: Props) {
               </label>
               <div className="mt-2">
                 <input
-                  {...register("email")}
+                  {...register("email", { required: true })}
                   type="email"
                   autoComplete="email"
                   className="block w-full px-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -137,7 +137,7 @@ export default function RegistrationForm({}: Props) {
               </label>
               <div className="mt-2">
                 <input
-                  {...register("phone")}
+                  {...register("phone", { required: true })}
                   type="text"
                   autoComplete="address-level2"
                   className="block w-full px-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -154,7 +154,7 @@ export default function RegistrationForm({}: Props) {
               </label>
               <div className="mt-2">
                 <input
-                  {...register("linkedin")}
+                  {...register("linkedin", { required: true })}
                   type="text"
                   autoComplete="address-level1"
                   className="block w-full px-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -171,7 +171,7 @@ export default function RegistrationForm({}: Props) {
               </label>
               <div className="mt-2">
                 <input
-                  {...register("company")}
+                  {...register("company", { required: true })}
                   type="text"
                   autoComplete="company"
                   className="block w-full px-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"

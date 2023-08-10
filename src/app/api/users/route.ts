@@ -14,13 +14,28 @@ export async function GET(req: NextRequest) {
 
 
 export async function POST(req: NextRequest, res: NextResponse) {
-    const data = await req.json()
+    const data = await req.json();
+    let count = 100;
+    let sample = data.usersData[0];
+    let myData: any = [];
+
+    for (let i = 0; i < 500; i++) {
+        myData.push({
+            username: sample.username + count,
+            email: sample.email + count,
+            phone: sample.phone + count,
+            linkedin: sample.linkedin + count,
+            company: sample.company + count,
+        });
+        count++;
+    }
+
 
     try {
         const { db } = await connectToDatabase();
-        const collection = await db.collection('users');
-        const result = await collection.insertOne(data);
-        return NextResponse.json({ status: "Success", result });
+        await db.collection('users').insertMany(myData);
+
+        return NextResponse.json({ status: "Success" });
     } catch (error) {
         console.error('Error saving user:', error);
         return NextResponse.json({ message: 'Internal Server Error' });
